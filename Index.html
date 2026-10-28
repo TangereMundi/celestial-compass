@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base target="_top">
+<title><?= siteName ?></title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+  /* Two-ink print palette: ultramarine + coral on cool paper */
+  :root {
+    --paper: #f3f4f1;
+    --ink: #19205e;
+    --blue: #2b3ad9;
+    --coral: #ff5c7a;
+    --wash: #e3e6fa;
+    --alert: #b3203f;
+    --rule: rgba(43, 58, 217, .28);
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --text: "Literata", Georgia, "Times New Roman", serif;
+    --glyph: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols", "Noto Sans Symbols 2", "DejaVu Sans", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.65 var(--text); -webkit-text-size-adjust: 100%; }
+  a { color: var(--blue); text-underline-offset: .18em; }
+  :focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; border-radius: 2px; }
+  [hidden] { display: none !important; }
+  .wrap { width: min(70rem, 100% - 2rem); margin-inline: auto; }
+
+  header.top { display: flex; justify-content: space-between; align-items: baseline; padding-block: 1.1rem; border-bottom: 1.5px solid var(--blue); }
+  .brand { font: 800 1.2rem/1 var(--display); letter-spacing: -.01em; color: var(--blue); }
+  .linkbtn { background: none; border: 0; padding: 0; font: inherit; color: var(--blue); text-decoration: underline; text-underline-offset: .18em; cursor: pointer; }
+  .testmode { background: var(--coral); color: var(--ink); font: 600 .9rem/1.3 var(--display); padding: .45rem 1rem; text-align: center; }
+
+  /* Hero: the wheel is the one memorable thing */
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "lead" "sky" "form"; gap: 1.2rem 3.5rem; padding-block: 2rem 3rem; }
+  .lead { grid-area: lead; } .sky { grid-area: sky; } .formarea { grid-area: form; }
+  @media (min-width: 62rem) { .hero { grid-template-columns: minmax(0, 28rem) minmax(0, 1fr); grid-template-areas: "lead sky" "form sky"; grid-template-rows: auto 1fr; align-items: start; padding-block: 3.2rem 4rem; } }
+  h1 { font: 800 clamp(2.2rem, 5.6vw, 3.6rem)/1.02 var(--display); letter-spacing: -.035em; margin: 0 0 1rem; color: var(--blue); font-variation-settings: "opsz" 96; }
+  .lede { margin: 0; max-width: 34rem; }
+
+  form { display: grid; gap: 1.15rem; }
+  .field { display: grid; gap: .15rem; }
+  label, .legend { font: 600 .95rem/1.3 var(--display); }
+  .hint { font-size: .88rem; line-height: 1.45; opacity: .85; }
+  input[type=text], input[type=email], input[type=date], input[type=time] {
+    width: 100%; font: 400 1.1rem/1.4 var(--text); color: var(--ink); background: transparent; padding: .45rem 0 .4rem;
+    border: 0; border-bottom: 1.5px solid var(--blue); border-radius: 0; min-height: 2.6rem;
+  }
+  input::placeholder { color: rgba(25, 32, 94, .5); }
+  input:focus { outline: none; background: var(--wash); box-shadow: 0 2px 0 0 var(--coral); }
+  input:focus-visible { outline: none; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .check { display: flex; gap: .65rem; align-items: flex-start; font: 400 .92rem/1.45 var(--text); }
+  .check input { margin-top: .22rem; width: 1.15rem; height: 1.15rem; accent-color: var(--blue); flex: none; }
+  details.tz summary { cursor: pointer; font: 600 .92rem/1.4 var(--display); color: var(--blue); }
+  details.tz[open] summary { margin-bottom: .5rem; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .btn { font: 600 1.05rem/1 var(--display); letter-spacing: .005em; color: var(--paper); background: var(--blue); border: 0; border-radius: 2px; padding: 1rem 1.5rem; min-height: 3.1rem; cursor: pointer; justify-self: start; box-shadow: 4px 4px 0 var(--coral); transition: transform .12s ease, box-shadow .12s ease; }
+  .btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--coral); }
+  .btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--coral); }
+  .btn[disabled] { opacity: .65; cursor: progress; transform: none; box-shadow: 4px 4px 0 var(--coral); }
+  .btn.small { padding: .75rem 1.1rem; min-height: 2.6rem; font-size: .98rem; }
+  .status { min-height: 1.4rem; margin: 0; font: 600 .95rem/1.4 var(--display); color: var(--alert); }
+  .done { border-left: 4px solid var(--coral); padding: .2rem 0 .2rem 1rem; }
+  .done p { margin: 0 0 .5rem; }
+
+  figure.sky { margin: 0; }
+  figure.sky svg { width: 100%; height: auto; max-height: 82vh; max-width: 40rem; display: block; margin-inline: auto; }
+  figcaption { font-size: .95rem; line-height: 1.5; margin-top: .6rem; max-width: 40rem; }
+  svg text { font-family: var(--glyph); fill: var(--ink); }
+  svg .signtxt { fill: var(--blue); }
+  .ring { fill: none; stroke: var(--blue); }
+  .draw { stroke-dasharray: 1900; stroke-dashoffset: 1900; animation: draw 1.6s cubic-bezier(.3, .7, .2, 1) forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) { .draw { animation: none; stroke-dashoffset: 0; } html { scroll-behavior: auto; } .btn { transition: none; } }
+  .key { display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: .86rem; margin-top: .4rem; }
+  .key i { display: inline-block; width: 1.6rem; height: 0; border-top: 2px solid; vertical-align: middle; margin-right: .4rem; }
+
+  /* Reading: a printed page, headings in the margin */
+  section.page { border-top: 1.5px solid var(--blue); padding-block: 2.4rem 3rem; }
+  h2 { font: 800 clamp(1.7rem, 4vw, 2.4rem)/1.05 var(--display); letter-spacing: -.025em; margin: 0 0 1.6rem; color: var(--blue); }
+  .row { display: grid; gap: .25rem 2.5rem; padding-block: 1.1rem; border-top: 1px solid var(--rule); }
+  .row:first-of-type { border-top: 0; }
+  @media (min-width: 48rem) { .row { grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); } }
+  .row h3 { font: 600 1.02rem/1.3 var(--display); margin: .35rem 0 0; color: var(--blue); }
+  .copy p { margin: 0 0 .8rem; max-width: 42rem; }
+  .copy ul { margin: 0 0 .8rem; padding-left: 1.2rem; max-width: 42rem; }
+  .copy li { margin-bottom: .5rem; }
+  .copy > :last-child { margin-bottom: 0; }
+
+  /* Plans: a price list, not a card grid */
+  .plan { display: grid; gap: .8rem 2rem; padding-block: 1.3rem; border-top: 1px solid var(--rule); align-items: center; }
+  .plan:last-child { border-bottom: 1px solid var(--rule); }
+  @media (min-width: 48rem) { .plan { grid-template-columns: minmax(0, 1fr) auto; } }
+  .plan h3 { font: 600 1.25rem/1.2 var(--display); margin: 0 0 .25rem; }
+  .plan p { margin: 0; max-width: 40rem; }
+  .buy { display: flex; align-items: center; gap: 1.2rem; }
+  .price { font: 800 1.9rem/1 var(--display); letter-spacing: -.02em; color: var(--blue); min-width: 5.5rem; }
+  .resume { background: var(--wash); padding: .9rem 1.1rem; margin-bottom: 1.2rem; border-left: 4px solid var(--blue); }
+  .fallback { margin: .6rem 0 0; font: 600 .95rem/1.4 var(--display); }
+  .pay-note { font-size: .9rem; margin-top: 1rem; max-width: 40rem; }
+
+  footer { border-top: 1.5px solid var(--blue); padding-block: 1.6rem 3rem; font-size: .88rem; line-height: 1.55; }
+  footer p { margin: 0 0 .5rem; max-width: 46rem; }
+  dialog { max-width: 34rem; width: calc(100% - 2rem); border: 1.5px solid var(--blue); border-radius: 2px; background: var(--paper); color: var(--ink); padding: 1.5rem; font-size: .98rem; }
+  dialog::backdrop { background: rgba(25, 32, 94, .5); }
+  dialog h2 { font-size: 1.5rem; margin-bottom: .8rem; }
+</style>
+</head>
+<body>
+<div class="testmode" id="testmode" hidden>Test mode: PayPal is in sandbox, so no real money moves.</div>
+<div class="wrap">
+  <header class="top">
+    <span class="brand" id="brand"></span>
+    <button type="button" class="linkbtn" id="openPrivacy">Privacy</button>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="lead">
+        <h1>Your birth chart, calculated from the real sky.</h1>
+        <p class="lede">Tell us when you were born. We work out where every planet stood at that moment and email you a reading made for you, free.</p>
+      </div>
+
+      <figure class="sky">
+        <svg id="wheel" viewBox="-30 -30 660 660" role="img" aria-labelledby="wheelCap"></svg>
+        <figcaption id="wheelCap">Loading today’s sky…</figcaption>
+        <div class="key" id="key" hidden><span><i style="color:var(--blue)"></i>Aspects that flow</span><span><i style="color:var(--coral)"></i>Aspects with friction</span></div>
+      </figure>
+
+      <div class="formarea">
+        <form id="form" novalidate autocomplete="on">
+          <div class="field"><label for="name">Full name</label><input id="name" name="name" type="text" autocomplete="name" required maxlength="80"></div>
+          <div class="field"><label for="email">Email for your reading</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="120"></div>
+          <div class="pair">
+            <div class="field"><label for="date">Date of birth</label><input id="date" name="date" type="date" min="1900-01-01" required></div>
+            <div class="field"><label for="time">Time of birth</label><input id="time" name="time" type="time"></div>
+          </div>
+          <label class="check"><input type="checkbox" id="timeUnknown"><span>I don’t know my birth time</span></label>
+          <div class="field"><label for="place">Birth place (optional)</label><input id="place" name="place" type="text" placeholder="City, Country" autocomplete="off" maxlength="120">
+            <span class="hint">With your time and place we can add your Rising sign and houses.</span></div>
+          <details class="tz">
+            <summary id="tzSummary">Time zone at birth</summary>
+            <div class="field"><label for="tz">Time zone where you were born</label><input id="tz" name="tz" type="text" list="tzlist" autocomplete="off" spellcheck="false">
+              <span class="hint">Pick the zone of your birthplace, for example Europe/London or America/New_York. It decides the exact moment of your birth.</span></div>
+            <datalist id="tzlist"></datalist>
+          </details>
+          <div class="hp" aria-hidden="true"><label>Website<input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
+          <label class="check"><input type="checkbox" id="consent" required><span>Email me my reading, and send the guidance I choose. I can unsubscribe at any time.</span></label>
+          <button class="btn" id="go" type="submit">Get my free reading</button>
+          <p class="status" id="status" role="alert" aria-live="polite"></p>
+        </form>
+
+        <div class="done" id="done" tabindex="-1" hidden>
+          <p id="doneMsg"></p>
+          <a href="#result">Read it below</a> &nbsp;·&nbsp; <button type="button" class="linkbtn" id="again">Make another reading</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="page" id="result" hidden aria-labelledby="resultTitle">
+      <h2 id="resultTitle" tabindex="-1"></h2>
+      <div id="readingBody"></div>
+    </section>
+
+    <section class="page" id="plans" aria-labelledby="plansTitle">
+      <h2 id="plansTitle">Go deeper</h2>
+      <div class="resume" id="resume" hidden></div>
+      <div id="planList"></div>
+      <p class="pay-note">You pay securely through PayPal. You are only charged when you approve the payment there.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Astrology is a tool for reflection and entertainment. It is not medical, legal or financial advice.</p>
+    <p id="contactLine"></p>
+  </footer>
+</div>
+
+<dialog id="privacy" aria-labelledby="privTitle">
+  <h2 id="privTitle">Your data</h2>
+  <p>We store your name, email address and birth details in a private spreadsheet. We use them only to calculate your chart and to email the readings you asked for. We never sell or share them.</p>
+  <p>Every email has an unsubscribe link. To see or delete your data, email us and we will do it.</p>
+  <p id="privLink"></p>
+  <button type="button" class="btn small" id="closePrivacy">Close</button>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+  var CFG = <?!= cfgJson ?>;
+  var SIGNS = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
+  var VS = '︎'; // force text (not emoji) glyphs
+  var SIGN_GLYPH = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'].map(function (g) { return g + VS; });
+  var PLANET_GLYPH = { Sun: '☉', Moon: '☽', Mercury: '☿', Venus: '♀', Mars: '♂', Jupiter: '♃', Saturn: '♄', Uranus: '♅', Neptune: '♆', Pluto: '♇', Node: '☊' };
+  var $ = function (s) { return document.querySelector(s); };
+  var state = { readerId: null, token: null };
+  var runner = (window.google && google.script && google.script.run) || null;
+
+  // ---------- wheel ----------
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent) { var n = document.createElementNS(NS, tag); Object.keys(attrs || {}).forEach(function (k) { n.setAttribute(k, attrs[k]); }); if (parent) parent.appendChild(n); return n; }
+  function txt(parent, x, y, s, size, cls, anchor) { var t = el('text', { x: x, y: y, 'font-size': size, 'text-anchor': anchor || 'middle', 'dominant-baseline': 'central', class: cls || '' }, parent); t.textContent = s; return t; }
+
+  function spread(items, minGap) { // items sorted by lon; returns display longitudes
+    var n = items.length, d = items.map(function (i) { return i.lon; });
+    for (var iter = 0; iter < 60; iter++) {
+      var moved = false;
+      for (var i = 0; i < n; i++) {
+        var j = (i + 1) % n, gap = ((d[j] - d[i]) % 360 + 360) % 360;
+        if (n > 1 && gap < minGap) { var push = (minGap - gap) / 2 + .01; d[i] -= push; d[j] += push; moved = true; }
+      }
+      if (!moved) break;
+    }
+    return d;
+  }
+
+  function drawWheel(data, animate) {
+    var svg = $('#wheel'); svg.textContent = '';
+    var cx = 300, cy = 300, rot = (data.asc !== null && data.asc !== undefined) ? data.asc : 0;
+    function phi(L) { return (180 + (L - rot)) * Math.PI / 180; }
+    function pt(r, L) { return [cx + r * Math.cos(phi(L)), cy - r * Math.sin(phi(L))]; }
+    function line(r1, L1, r2, L2, attrs) { var a = pt(r1, L1), b = pt(r2, L2); return el('line', Object.assign({ x1: a[0], y1: a[1], x2: b[0], y2: b[1] }, attrs), svg); }
+    var rings = [[292, 1.6], [246, 1.2], [205, 1], [168, 1]];
+    rings.forEach(function (r, i) { el('circle', { cx: cx, cy: cy, r: r[0], 'stroke-width': r[1], class: 'ring' + (animate && i < 2 ? ' draw' : '') }, svg); });
+
+    for (var d = 0; d < 360; d += 5) line(246, d, d % 10 === 0 ? 238 : 241, d, { stroke: '#2b3ad9', 'stroke-width': d % 30 === 0 ? 0 : .8 });
+    for (var s = 0; s < 12; s++) {
+      line(246, s * 30, 292, s * 30, { stroke: '#2b3ad9', 'stroke-width': 1.2 });
+      var g = pt(269, s * 30 + 15); txt(svg, g[0], g[1], SIGN_GLYPH[s], 28, 'signtxt');
+    }
+    if (data.houseKnown && rot !== null) {
+      var anchor = Math.floor(rot / 30);
+      for (var h = 0; h < 12; h++) { var mid = pt(186.5, (anchor + h) * 30 + 15); txt(svg, mid[0], mid[1], String(h + 1), 12, '').setAttribute('opacity', '.65'); }
+      line(168, rot, 292, rot, { stroke: '#2b3ad9', 'stroke-width': 2 }); line(168, rot + 180, 292, rot + 180, { stroke: '#2b3ad9', 'stroke-width': 1 });
+      var ac = pt(310, rot); txt(svg, ac[0] - 4, ac[1], 'AC', 13, '', 'end');
+      if (data.mc !== null) { line(168, data.mc, 292, data.mc, { stroke: '#2b3ad9', 'stroke-width': 1.6 }); line(168, data.mc + 180, 292, data.mc + 180, { stroke: '#2b3ad9', 'stroke-width': 1 }); var mp = pt(310, data.mc); txt(svg, mp[0], mp[1], 'MC', 13, ''); }
+    }
+
+    // aspects
+    var anyAspect = false;
+    (data.aspects || []).forEach(function (a) {
+      if (a.type === 'conjunction' || !data.bodies[a.a] || !data.bodies[a.b]) return;
+      var hard = a.type === 'square' || a.type === 'opposition';
+      line(168, data.bodies[a.a].lon, 168, data.bodies[a.b].lon, { stroke: hard ? '#ff5c7a' : '#2b3ad9', 'stroke-width': 1.3, 'stroke-opacity': .85, 'stroke-dasharray': a.type === 'sextile' ? '4 3' : '' });
+      anyAspect = true;
+    });
+    $('#key').hidden = !anyAspect;
+
+    // planets, with collision spreading
+    var items = Object.keys(data.bodies).map(function (k) { return { k: k, lon: data.bodies[k].lon, retro: data.bodies[k].retro }; }).sort(function (a, b) { return a.lon - b.lon; });
+    var disp = spread(items, 9.5);
+    items.forEach(function (it, i) {
+      var a = pt(246, it.lon), b = pt(240, it.lon), c = pt(236, disp[i]);
+      el('line', { x1: b[0], y1: b[1], x2: c[0], y2: c[1], stroke: '#2b3ad9', 'stroke-width': .8 }, svg);
+      el('circle', { cx: a[0], cy: a[1], r: 5, fill: '#ff5c7a', stroke: '#19205e', 'stroke-width': 1.2 }, svg);
+      var p = pt(221, disp[i]); txt(svg, p[0], p[1], PLANET_GLYPH[it.k] + VS, it.k === 'Node' ? 20 : 27, '');
+      if (it.retro) { var r = pt(204, disp[i]); txt(svg, r[0], r[1] - 1, 'R', 10, '').setAttribute('opacity', '.85'); }
+    });
+  }
+
+  function signOf(lon) { return SIGNS[Math.floor(((lon % 360) + 360) % 360 / 30) % 12]; }
+  function natalCaption(chart, place) {
+    var s = 'Your sky at birth: Sun in ' + signOf(chart.bodies.Sun.lon) + ', Moon in ' + signOf(chart.bodies.Moon.lon);
+    if (chart.asc !== null) s += ', Rising ' + signOf(chart.asc);
+    return s + '.' + (place ? ' Born in ' + place + '.' : '');
+  }
+
+  // ---------- reading ----------
+  function renderReading(reading) {
+    $('#resultTitle').textContent = reading.title;
+    var body = $('#readingBody'); body.textContent = '';
+    reading.sections.forEach(function (s) {
+      var row = document.createElement('div'); row.className = 'row';
+      var h = document.createElement('h3'); h.textContent = s.h; row.appendChild(h);
+      var copy = document.createElement('div'); copy.className = 'copy';
+      (s.p || []).forEach(function (t) { var p = document.createElement('p'); p.textContent = t; copy.appendChild(p); });
+      if (s.list) { var ul = document.createElement('ul'); s.list.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); }); copy.appendChild(ul); }
+      row.appendChild(copy); body.appendChild(row);
+    });
+    $('#result').hidden = false;
+  }
+
+  // ---------- form ----------
+  function setStatus(msg) { $('#status').textContent = msg || ''; }
+  function tzDefault() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } }
+  function fillTz() {
+    var list = [];
+    try { if (Intl.supportedValuesOf) list = Intl.supportedValuesOf('timeZone'); } catch (e) { /* older browsers */ }
+    if (!list.length) list = ['Europe/Amsterdam', 'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Europe/Madrid', 'Europe/Rome', 'Europe/Athens', 'Europe/Moscow', 'Africa/Johannesburg', 'Africa/Cairo', 'Africa/Lagos', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Bangkok', 'Asia/Shanghai', 'Asia/Tokyo', 'Asia/Seoul', 'Australia/Sydney', 'Pacific/Auckland', 'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'America/Toronto', 'America/Mexico_City', 'America/Sao_Paulo', 'America/Argentina/Buenos_Aires', 'UTC'];
+    var dl = $('#tzlist'); list.forEach(function (z) { var o = document.createElement('option'); o.value = z; dl.appendChild(o); });
+    $('#tz').value = tzDefault() || 'Europe/London';
+    refreshTzSummary();
+  }
+  function refreshTzSummary() { $('#tzSummary').textContent = 'Time zone at birth: ' + ($('#tz').value || 'not set') + ' (change)'; }
+
+  function submit(ev) {
+    ev.preventDefault(); setStatus('');
+    if (!runner) { setStatus('This page needs to run from your published web app link.'); return; }
+    var f = {
+      name: $('#name').value, email: $('#email').value, date: $('#date').value, time: $('#time').value,
+      timeUnknown: $('#timeUnknown').checked, place: $('#place').value, tz: $('#tz').value.trim(), consent: $('#consent').checked, website: $('#website').value
+    };
+    var btn = $('#go'); btn.disabled = true; btn.textContent = 'Calculating your chart…';
+    runner.withSuccessHandler(function (res) {
+      btn.disabled = false; btn.textContent = 'Get my free reading';
+      if (!res || !res.ok) { setStatus((res && res.error) || 'Something went wrong. Please try again.'); return; }
+      state.readerId = res.readerId; state.token = res.token;
+      renderReading(res.reading); drawWheel(res.chart, true);
+      $('#wheelCap').textContent = natalCaption(res.chart, res.place);
+      var email = f.email.trim();
+      var msg = res.emailStatus === 'sent' ? 'Your reading is below, and a copy is on its way to ' + email + '.'
+        : res.emailStatus === 'queued' ? 'Your reading is below. We are very busy, so the email copy to ' + email + ' will arrive within a day.'
+        : 'Your reading is below. We already emailed ' + email + ' this week, so this copy stays here.';
+      $('#doneMsg').textContent = msg; $('#form').hidden = true; $('#done').hidden = false;
+      showResume(null);
+      $('figure.sky').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('#done').focus({ preventScroll: true });
+    }).withFailureHandler(function () {
+      btn.disabled = false; btn.textContent = 'Get my free reading'; setStatus('We could not reach the server. Check your connection and try again.');
+    }).submitFree(f);
+  }
+
+  // ---------- plans & checkout ----------
+  function money(v) { try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: CFG.currency }).format(+v); } catch (e) { return CFG.currency + ' ' + v; } }
+  function renderPlans() {
+    var box = $('#planList'); box.textContent = '';
+    CFG.plans.forEach(function (p) {
+      var row = document.createElement('div'); row.className = 'plan';
+      var left = document.createElement('div'); var h = document.createElement('h3'); h.textContent = p.name; var d = document.createElement('p'); d.textContent = p.blurb; left.appendChild(h); left.appendChild(d);
+      var fb = document.createElement('p'); fb.className = 'fallback'; fb.hidden = true; left.appendChild(fb);
+      var buy = document.createElement('div'); buy.className = 'buy';
+      var price = document.createElement('span'); price.className = 'price'; price.textContent = money(p.price);
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'btn small'; b.textContent = 'Choose ' + p.name.toLowerCase();
+      b.setAttribute('aria-label', 'Pay ' + money(p.price) + ' for ' + p.name);
+      b.addEventListener('click', function () { checkout(p.id, b, fb); });
+      buy.appendChild(price); buy.appendChild(b); row.appendChild(left); row.appendChild(buy); box.appendChild(row);
+    });
+  }
+  function showResume(name) {
+    var r = $('#resume'); if (!name) { r.hidden = true; return; }
+    r.textContent = 'Welcome back, ' + name + '. Choose the guidance you want and we will use the chart we already calculated for you.'; r.hidden = false;
+  }
+  function checkout(planId, btn, fallback) {
+    if (!state.token) { setStatus('Start with your free reading so we can calculate your chart.'); $('#name').focus(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (!runner) return;
+    var label = btn.textContent; btn.disabled = true; btn.textContent = 'Opening PayPal…'; fallback.hidden = true;
+    runner.withSuccessHandler(function (res) {
+      if (!res || !res.ok) { btn.disabled = false; btn.textContent = label; fallback.hidden = false; fallback.textContent = (res && res.error) || 'Payment could not start.'; return; }
+      var a = document.createElement('a'); a.href = res.approveUrl; a.target = '_top'; a.rel = 'noopener'; a.textContent = 'Continue to PayPal';
+      fallback.textContent = ''; fallback.appendChild(a); fallback.hidden = false;
+      try { window.top.location.href = res.approveUrl; } catch (e) { /* user can click the link */ }
+      setTimeout(function () { btn.disabled = false; btn.textContent = label; }, 4000);
+    }).withFailureHandler(function () { btn.disabled = false; btn.textContent = label; fallback.hidden = false; fallback.textContent = 'We could not reach the server. Please try again.'; })
+      .startCheckout(state.readerId, state.token, planId);
+  }
+
+  // ---------- init ----------
+  function init() {
+    $('#brand').textContent = CFG.siteName; document.title = CFG.siteName + ': your birth chart reading';
+    $('#testmode').hidden = !CFG.sandbox;
+    if (CFG.contact) { var c = $('#contactLine'); c.textContent = 'Questions or data requests: '; var a = document.createElement('a'); a.href = 'mailto:' + CFG.contact; a.textContent = CFG.contact; c.appendChild(a); }
+    if (CFG.privacyUrl) { var pl = $('#privLink'), pa = document.createElement('a'); pa.href = CFG.privacyUrl; pa.textContent = 'Read our full privacy policy'; pl.appendChild(pa); }
+    $('#openPrivacy').addEventListener('click', function () { var d = $('#privacy'); if (d.showModal) d.showModal(); else d.setAttribute('open', ''); });
+    $('#closePrivacy').addEventListener('click', function () { $('#privacy').close ? $('#privacy').close() : $('#privacy').removeAttribute('open'); });
+    $('#timeUnknown').addEventListener('change', function () { $('#time').disabled = this.checked; if (this.checked) $('#time').value = ''; });
+    $('#tz').addEventListener('input', refreshTzSummary); $('#tz').addEventListener('change', refreshTzSummary);
+    $('#form').addEventListener('submit', submit);
+    $('#again').addEventListener('click', function () { $('#form').hidden = false; $('#done').hidden = true; $('#form').reset(); $('#tz').value = tzDefault(); refreshTzSummary(); $('#time').disabled = false; $('#result').hidden = true; state.readerId = state.token = null; loadSky(); window.scrollTo({ top: 0, behavior: 'smooth' }); $('#name').focus(); });
+    var today = new Date(); $('#date').max = today.toISOString().slice(0, 10);
+    fillTz(); renderPlans();
+    if (CFG.resume) { state.readerId = CFG.resume.id; state.token = CFG.resume.token; showResume(CFG.resume.name); document.getElementById('plans').scrollIntoView(); }
+    loadSky();
+  }
+
+  function skyCaption(s) {
+    var c = 'The sky right now: Sun in ' + s.sunSign + ', Moon in ' + s.moonSign + ' (' + s.phase.toLowerCase() + ').';
+    if (s.retro && s.retro.length) c += ' ' + s.retro.join(' and ') + (s.retro.length > 1 ? ' are' : ' is') + ' retrograde.';
+    return c + ' Enter your birth details to see yours.';
+  }
+  function loadSky() {
+    if (!runner) { $('#wheelCap').textContent = 'Preview mode: the live sky appears when this page runs from your web app link.'; drawWheel({ bodies: {}, aspects: [] }, true); return; }
+    runner.withSuccessHandler(function (s) { drawWheel(s, true); $('#wheelCap').textContent = skyCaption(s); })
+      .withFailureHandler(function () { drawWheel({ bodies: {}, aspects: [] }, true); $('#wheelCap').textContent = 'The zodiac wheel. Enter your birth details to see your own sky.'; })
+      .skyNow();
+  }
+  init();
+})();
+</script>
+</body>
+</html>
